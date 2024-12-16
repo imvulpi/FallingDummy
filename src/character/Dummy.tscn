@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://yy5bt2t03ikj"]
+
+[ext_resource type="Script" path="res://src/character/Dummy.cs" id="1_57gnm"]
+[ext_resource type="Texture2D" uid="uid://bgitpq0vsrrbg" path="res://graphics/characters/acorn-dummy.png" id="2_7rrgc"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vi2at"]
+size = Vector2(478, 485)
+
+[node name="Dummy" type="CharacterBody2D"]
+script = ExtResource("1_57gnm")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(1, -13.5)
+shape = SubResource("RectangleShape2D_vi2at")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_7rrgc")
