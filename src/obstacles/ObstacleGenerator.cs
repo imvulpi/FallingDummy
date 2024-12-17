@@ -1,15 +1,35 @@
+using FallingDummy.src.obstacles.bundles;
+using FallingDummy.src.obstacles.factory;
+using FallingDummy.src.obstacles.obstacle;
 using Godot;
 using System;
 
-public partial class ObstacleGenerator : Node
+public class ObstacleGenerator
 {
-	
-	public override void _Ready()
+	public IObstacleFactory MainObstacleFactory { get; set; }
+	public IObstacleBundle Bundle { get; set; }
+	public void Init()
 	{
-	}
+        if (Bundle == null)
+        {
+            Bundle = BundleCreator.GetClassicBundle();
+            Bundle.NormalizePercentages();
+        }
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
+        MainObstacleFactory ??= ObstacleFactoryHelper.CreateDefaultObstacleFactory();
+    }
+
+	public ObstacleNode GetRandomObstacle()
 	{
+        if(MainObstacleFactory == null)
+        {
+            GD.PushError("Main obstacle factory cant be null");
+        }
+        
+        if(Bundle == null)
+        {
+            GD.PushError("Bundle cant be null");
+        }
+ 		return MainObstacleFactory.CreateObstacle(Bundle.GetRandomObstacle().ID);
 	}
 }

@@ -1,17 +1,35 @@
-[gd_scene load_steps=4 format=3 uid="uid://yy5bt2t03ikj"]
+[gd_scene load_steps=7 format=3 uid="uid://yy5bt2t03ikj"]
 
 [ext_resource type="Script" path="res://src/character/Dummy.cs" id="1_57gnm"]
-[ext_resource type="Texture2D" uid="uid://bgitpq0vsrrbg" path="res://graphics/characters/acorn-dummy.png" id="2_7rrgc"]
+
+[sub_resource type="Gradient" id="Gradient_a7tsf"]
+offsets = PackedFloat32Array(0, 0.364198, 0.67284, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0.639144, 0.639144, 0.639144, 1, 0.703704, 0.703704, 0.703704, 1, 1, 1, 1, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_mwo7l"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_i1yca"]
+width = 384
+height = 384
+color_ramp = SubResource("Gradient_a7tsf")
+noise = SubResource("FastNoiseLite_mwo7l")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vi2at"]
-size = Vector2(478, 485)
+size = Vector2(384, 384)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hviem"]
+size = Vector2(200, 200)
 
 [node name="Dummy" type="CharacterBody2D"]
 script = ExtResource("1_57gnm")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(1, -13.5)
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = SubResource("NoiseTexture2D_i1yca")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource("RectangleShape2D_vi2at")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("2_7rrgc")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_hviem")
