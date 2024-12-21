@@ -1,9 +1,6 @@
 ﻿using Godot;
+using Godot.Collections;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FallingDummy.src.obstacles.obstacle
 {
@@ -15,10 +12,11 @@ namespace FallingDummy.src.obstacles.obstacle
         public Area2D ObstacleArea { get; set; }
         public virtual float Damage { get; set; } = 1f;
         public virtual float Health { get; set; } = 1f;
+        public virtual float ScoreReward {  get; set; } = 1f;
 
         public override void _Ready()
         {
-            ObstacleArea.BodyEntered += ObstacleArea_BodyEntered;
+            ObstacleArea.AreaEntered += ObstacleArea_AreaEntered;
             ObstacleArea.InputEvent += ObstacleArea_InputEvent;
         }
 
@@ -37,11 +35,12 @@ namespace FallingDummy.src.obstacles.obstacle
             }
         }
 
-        public virtual void ObstacleArea_BodyEntered(Node2D body)
+        public virtual void ObstacleArea_AreaEntered(Area2D body)
         {
             if(body is Dummy dummy)
             {
                 dummy.DealDamage(Damage);
+                DestroyEvent.Invoke(this, new EventArgs());
             }
         }
 
@@ -52,6 +51,34 @@ namespace FallingDummy.src.obstacles.obstacle
             {
                 DestroyEvent.Invoke(this, new EventArgs());
             }
+        }
+
+        public Vector2 GetSize()
+        {
+            Array<Node> nodes = ObstacleArea.GetChildren();
+            foreach (Node node in nodes)
+            {
+                if(node is CollisionShape2D cs2d)
+                {
+                    Shape2D shape = cs2d.Shape;
+                    if (shape is RectangleShape2D rectangleShape)
+                    {
+                        return rectangleShape.Size;
+                    }
+                    else if (shape is CircleShape2D circleShape)
+                    {
+                        return new Vector2(circleShape.Radius, circleShape.Radius);
+                    }else if(shape is CapsuleShape2D capsuleShape)
+                    {
+                        return new Vector2(capsuleShape.Radius, capsuleShape.Height);
+                    }
+                    else
+                    {
+                        GD.PrintErr("Shape not supported in GetSize");
+                    }
+                }
+            }
+            return new Vector2(512,512);
         }
 
         /// <summary>

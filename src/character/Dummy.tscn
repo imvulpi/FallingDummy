@@ -1,6 +1,12 @@
-[gd_scene load_steps=7 format=3 uid="uid://yy5bt2t03ikj"]
+[gd_scene load_steps=8 format=3 uid="uid://yy5bt2t03ikj"]
 
 [ext_resource type="Script" path="res://src/character/Dummy.cs" id="1_57gnm"]
+[ext_resource type="Shader" path="res://src/character/Dummy.gdshader" id="2_651bn"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6xv1n"]
+shader = ExtResource("2_651bn")
+shader_parameter/wiggle_strength = 0.01
+shader_parameter/wiggle_speed = 10.0
 
 [sub_resource type="Gradient" id="Gradient_a7tsf"]
 offsets = PackedFloat32Array(0, 0.364198, 0.67284, 1)
@@ -14,22 +20,15 @@ height = 384
 color_ramp = SubResource("Gradient_a7tsf")
 noise = SubResource("FastNoiseLite_mwo7l")
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_vi2at"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hviem"]
 size = Vector2(384, 384)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_hviem"]
-size = Vector2(200, 200)
-
-[node name="Dummy" type="CharacterBody2D"]
+[node name="Dummy" type="Area2D"]
 script = ExtResource("1_57gnm")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_6xv1n")
 texture = SubResource("NoiseTexture2D_i1yca")
-
-[node name="Area2D" type="Area2D" parent="."]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-shape = SubResource("RectangleShape2D_vi2at")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_hviem")

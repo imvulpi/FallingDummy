@@ -1,6 +1,20 @@
-[gd_scene load_steps=6 format=3 uid="uid://dbbkeecalljuq"]
+[gd_scene load_steps=7 format=3 uid="uid://dbbkeecalljuq"]
 
 [ext_resource type="Script" path="res://src/obstacles/obstacle/simple_box/SimpleBox.cs" id="1_xbohv"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_ehk70"]
+_surfaces = [{
+"2d": true,
+"aabb": AABB(-256, -256, 0, 512, 512, 0),
+"attribute_data": PackedByteArray(0, 0, 0, 0, 0, 0, 128, 63, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 128, 63, 0, 0, 0, 0, 0, 0, 128, 63, 0, 0, 128, 63),
+"format": 34393296913,
+"index_count": 6,
+"index_data": PackedByteArray(3, 0, 0, 0, 1, 0, 1, 0, 2, 0, 3, 0),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 4,
+"vertex_data": PackedByteArray(0, 0, 128, 195, 0, 0, 128, 67, 0, 0, 128, 195, 0, 0, 128, 195, 0, 0, 128, 67, 0, 0, 128, 195, 0, 0, 128, 67, 0, 0, 128, 67)
+}]
 
 [sub_resource type="Gradient" id="Gradient_dwxh1"]
 
@@ -21,7 +35,8 @@ size = Vector2(512, 512)
 script = ExtResource("1_xbohv")
 ObstacleArea = NodePath("Area2D")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="MeshInstance2D" parent="."]
+mesh = SubResource("ArrayMesh_ehk70")
 texture = SubResource("GradientTexture2D_0vpu4")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

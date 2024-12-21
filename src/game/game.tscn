@@ -1,17 +1,38 @@
-[gd_scene load_steps=2 format=3 uid="uid://s8jqkkx3gyy2"]
+[gd_scene load_steps=3 format=3 uid="uid://b42whkqh15ij3"]
 
-[ext_resource type="Script" path="res://src/game/Game.cs" id="1_chjtw"]
+[ext_resource type="Script" path="res://src/game/Game.cs" id="1_ndhxn"]
 
-[node name="Game" type="Node2D" node_paths=PackedStringArray("DummySpot", "ObstacleSpot", "Camera")]
-script = ExtResource("1_chjtw")
+[sub_resource type="LabelSettings" id="LabelSettings_6xhut"]
+font_size = 32
+font_color = Color(0.964706, 1, 1, 1)
+outline_size = 2
+outline_color = Color(0.576471, 0.733333, 1, 1)
+shadow_size = 0
+
+[node name="Game" type="Node2D" node_paths=PackedStringArray("DummySpot", "ObstacleSpot", "Camera", "PointsLabel")]
+script = ExtResource("1_ndhxn")
 DummySpot = NodePath("DummySpot")
 ObstacleSpot = NodePath("ObstacleSpot")
 Camera = NodePath("Camera2D")
+PointsLabel = NodePath("CanvasLayer/Label")
 
 [node name="ObstacleSpot" type="Node2D" parent="."]
 position = Vector2(0, 1920)
 
 [node name="DummySpot" type="Node2D" parent="."]
+position = Vector2(0, -925)
 
 [node name="Camera2D" type="Camera2D" parent="."]
 zoom = Vector2(0.25, 0.25)
+position_smoothing_enabled = true
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Label" type="Label" parent="CanvasLayer"]
+anchors_preset = -1
+offset_left = 39.0
+offset_top = 40.0
+offset_right = 185.0
+offset_bottom = 97.0
+text = "Score 0"
+label_settings = SubResource("LabelSettings_6xhut")

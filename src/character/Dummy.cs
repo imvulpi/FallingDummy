@@ -1,8 +1,7 @@
-using FallingDummy.src.obstacles.obstacle;
 using Godot;
 using System;
 
-public partial class Dummy : CharacterBody2D
+public partial class Dummy : Area2D
 {
 	public event EventHandler DeadEvent;
 

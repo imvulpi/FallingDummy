@@ -2,8 +2,6 @@ using FallingDummy.src.obstacles.bundles;
 using FallingDummy.src.obstacles.factory;
 using FallingDummy.src.obstacles.obstacle;
 using Godot;
-using System;
-
 public class ObstacleGenerator
 {
 	public IObstacleFactory MainObstacleFactory { get; set; }

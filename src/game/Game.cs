@@ -1,92 +1,104 @@
+using FallingDummy.src.commons.animations;
+using FallingDummy.src.commons.math;
+using FallingDummy.src.game;
 using FallingDummy.src.obstacles.obstacle;
 using FallingDummy.src.obstacles.obstacle.simple_box;
 using Godot;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-
 public partial class Game : Node2D
 {
-	[Export]
+	public event EventHandler<float> GameEnd;
+
+    [Export]
 	public Dummy Dummy { get; set; }
 	[Export]
-	public Node DummySpot { get; set; }
+	public Node2D DummySpot { get; set; }
 	[Export]
-	public Node ObstacleSpot { get; set; }
+	public Node2D ObstacleSpot { get; set; }
 	[Export]
 	public Camera2D Camera { get; set; }
+	[Export]
+	public float SpeedMultiply { get; set; } = 1;
+	[Export]
+	public float BaseSpeedHeight { get; set; } = 500;
+    [Export] public Label PointsLabel { get; set; }
 
-	private ObstacleGenerator ObstacleGenerator;
-	private List<ObstacleNode> ObstacleNodes = new List<ObstacleNode>();
-	public override void _Ready()
-	{
-		if (Dummy == null)
-		{
-			Dummy = ResourceLoader.Load<PackedScene>("res://src/character/Dummy.tscn").Instantiate<Dummy>();
-		}
+	public ObstacleGenerator ObstacleGenerator;
+    private readonly List<ObstacleNode> ObstacleNodes = new List<ObstacleNode>();
+	private bool Lost = false;
+    private GlitchAnimation GlitchAnimation { get; set; }
+	private GameObstacleHandler ObstacleHandler { get; set; }
+    public override void _Ready()
+    {
+        ObstacleGenerator ??= new ObstacleGenerator();
+        Dummy ??= ResourceLoader.Load<PackedScene>("res://src/character/Dummy.tscn").Instantiate<Dummy>();
+        ObstacleHandler ??= new GameObstacleHandler()
+        {
+            BaseSpeedHeight = BaseSpeedHeight,
+            SpeedMultiply = SpeedMultiply,
+            ObstacleGenerator = ObstacleGenerator,
+            ObstacleSpot = ObstacleSpot,
+            Dummy = Dummy,
+            Camera = Camera,
+            PointsLabel = PointsLabel,
+        };
 
-		if(DummySpot == null)
+        if (DummySpot == null)
 		{
-			DummySpot = new Node();
+			DummySpot = new Node2D();
 			AddChild(DummySpot);
 		}
 
 		DummySpot.AddChild(Dummy);
         Dummy.DeadEvent += Dummy_DeadEvent;
+        ObstacleGenerator.Init();
+    }
 
-        ObstacleGenerator = new ObstacleGenerator();
-		ObstacleGenerator.Init();
-	}
+	public void Reset()
+	{
+		ObstacleNodes.Clear();
+		Godot.Collections.Array<Node> nodes = ObstacleSpot.GetChildren();
+		foreach (Node node in nodes)
+		{
+			ObstacleSpot.RemoveChild(node);
+		}
+
+        Lost = false;
+        GlitchAnimation?.Reset();
+        SetProcess(true);
+    }
 
     private void Dummy_DeadEvent(object sender, EventArgs e)
     {
-		SetProcess(false);
-		GD.Print("YOU LOST!");
-		// Implement coming back to the menu
+		RunEndAnimation();
+    }
+
+	private void RunEndAnimation()
+	{
+        ColorRect glitchRect = new ColorRect();
+        Vector2 newSize = MathHelper.CalculateCamera2DSize(GetTree(), Camera) * 2;
+        glitchRect.Size = newSize;
+        glitchRect.Position = -newSize / 2;
+        GlitchAnimation = new(glitchRect, this);
+        GlitchAnimation.AnimationEnd += GlitchAnimation_AnimationEnd;
+		GlitchAnimation.Setup(this).Start();
+		Lost = true;
+    }
+
+    private void GlitchAnimation_AnimationEnd(object sender, EventArgs e)
+    {
+		GlitchAnimation.Stop();
+        GameEnd.Invoke(this, 0f);
+        SetProcess(false);
     }
 
     public override void _Process(double delta)
 	{
-		if (ObstacleSpot.GetChildCount() <= 0)
-		{
-			ObstacleNode obstacle = ObstacleGenerator.GetRandomObstacle();
-            ObstacleNodes.Add(obstacle);
-            ObstacleSpot.AddChild(obstacle);
-            obstacle.DestroyEvent += Obstacle_DestroyEvent;
-		}
-		else
-		{
-            for (int i = 0; i < ObstacleNodes.Count; i++)
-            {
-				ObstacleNode obstacle = ObstacleNodes[i];
-                obstacle.Velocity = -obstacle.GetGravity();
-                obstacle.Velocity = obstacle.AffectSpeed(obstacle.Velocity);
-                obstacle.MoveAndSlide();
-				
-                if (obstacle.GlobalPosition.Y < -GetTree().Root.GetVisibleRect().Size.Y * 3)
-                {
-                    ObstacleNodes.Remove(obstacle);
-                    ObstacleSpot.RemoveChild(obstacle);
-					i--;
-                }
-            }
-		}
-    }
-
-	private bool IsObstacleInWindow(Node2D node)
-	{
-		Rect2 viewsize = new Rect2(Camera.GlobalPosition - Camera.GetViewportRect().Size/2, Camera.GetViewportRect().Size);
-		return viewsize.HasPoint(node.Position);
-	}
-    private void Obstacle_DestroyEvent(object sender, EventArgs e)
-    {
-		if(sender is TntBox)
-		{
-			Dummy.DealDamage(2f);
-		}else if(sender is ObstacleNode obstacle)
-		{
-            ObstacleNodes.Remove(obstacle);
-            ObstacleSpot.RemoveChild(obstacle);
+        GlitchAnimation?.Update(delta);
+        if (!Lost)
+        {
+            ObstacleHandler?.Handle(delta);
         }
     }
 }

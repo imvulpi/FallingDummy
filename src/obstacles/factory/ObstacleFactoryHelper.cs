@@ -1,10 +1,5 @@
 ﻿using FallingDummy.src.obstacles.factory.box;
 using FallingDummy.src.obstacles.obstacle;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FallingDummy.src.obstacles.factory
 {

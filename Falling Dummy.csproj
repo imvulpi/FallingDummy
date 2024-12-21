@@ -6,4 +6,8 @@
     <EnableDynamicLoading>true</EnableDynamicLoading>
     <RootNamespace>FallingDummy</RootNamespace>
   </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="android\**" />
+    <EmbeddedResource Remove="android\**" />
+  </ItemGroup>
 </Project>

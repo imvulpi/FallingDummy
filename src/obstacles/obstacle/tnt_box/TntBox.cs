@@ -1,9 +1,4 @@
 ﻿using Godot;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FallingDummy.src.obstacles.obstacle.simple_box
 {
@@ -28,7 +23,7 @@ namespace FallingDummy.src.obstacles.obstacle.simple_box
             }
         }
 
-        public override void ObstacleArea_BodyEntered(Node2D body)
+        public override void ObstacleArea_AreaEntered(Area2D body)
         {
             return;
         }
