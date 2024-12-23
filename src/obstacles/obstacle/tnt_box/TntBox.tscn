@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://qmeoxe0d8ct7"]
+[gd_scene load_steps=5 format=3 uid="uid://qmeoxe0d8ct7"]
 
 [ext_resource type="Script" path="res://src/obstacles/obstacle/tnt_box/TntBox.cs" id="1_bf051"]
 
@@ -11,22 +11,16 @@ height = 512
 fill_from = Vector2(0, 1)
 fill_to = Vector2(0, 1)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_la7ro"]
-size = Vector2(384, 384)
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_764hq"]
 size = Vector2(512, 512)
 
-[node name="TntBox" type="CharacterBody2D" node_paths=PackedStringArray("ObstacleArea")]
+[node name="TntBox" type="Node2D" node_paths=PackedStringArray("ObstacleArea")]
 script = ExtResource("1_bf051")
+ObstacleName = "TNT Box"
 ObstacleArea = NodePath("Area2D")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = SubResource("GradientTexture2D_0vpu4")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("RectangleShape2D_la7ro")
-debug_color = Color(0, 0.580392, 0.87451, 0.756863)
 
 [node name="Area2D" type="Area2D" parent="."]
 

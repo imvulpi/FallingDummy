@@ -1,26 +1,18 @@
+using FallingDummy.src.character;
 using Godot;
 using System;
 
-public partial class Dummy : Area2D
+public partial class Dummy : StaticBody2D, IDummy
 {
-	public event EventHandler DeadEvent;
+	public float Health { get; set; } = 1.0f;
+	public float AttackStrength { get; set; } = 1.0f;
+    public bool Defeated { get; set; } = false;
 
-	[Export]
-	public float Health = 1f;
+    public event EventHandler DeadEvent;
 
-	[Export]
-	public float Shield = 0f;
-
-	public void DealDamage(float damage)
+    public void TakeDamage(float damage)
 	{
-		if (Shield > 0)
-		{
-			Shield -= damage;
-		}else
-		{
-            Health -= damage;
-		}
-
+		Health -= damage;
 		CheckHealth();
     }
 
@@ -28,12 +20,8 @@ public partial class Dummy : Area2D
 	{
 		if (Health <= 0)
 		{
-			Dead();
+			Defeated = true;
+			DeadEvent.Invoke(this, new EventArgs());
 		}
-	}
-
-	public void Dead()
-	{
-		DeadEvent.Invoke(this, new EventArgs());
 	}
 }

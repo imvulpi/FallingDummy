@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://06q42l8s71n2"]
+
+[ext_resource type="Script" path="res://src/obstacles/obstacle/swipe_box/SwipeBox.cs" id="1_vcvrv"]
+[ext_resource type="Texture2D" uid="uid://fpnwh2jgk5jr" path="res://graphics/effects/fire-particle-512x512-circle.png" id="2_7wv2g"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_q4kvi"]
+size = Vector2(512, 512)
+
+[node name="SwipeBox" type="Area2D" node_paths=PackedStringArray("ObstacleNode", "ObstacleArea")]
+script = ExtResource("1_vcvrv")
+ObstacleNode = NodePath(".")
+ObstacleArea = NodePath(".")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_q4kvi")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_7wv2g")

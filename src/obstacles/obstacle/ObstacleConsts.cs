@@ -1,7 +1,6 @@
-﻿
-namespace FallingDummy.src.obstacles.obstacle
+﻿namespace FallingDummy.src.obstacles.obstacle
 {
-    public static class ObstaclePaths
+    public static class ObstacleConsts
     {
         public const string DEV_PATH_PREFIX = "dummydev";
 
@@ -9,5 +8,7 @@ namespace FallingDummy.src.obstacles.obstacle
         public const string SIMPLE_BOX_PATH = "res://src/obstacles/obstacle/simple_box/SimpleBox.tscn";
         public const string TNT_BOX_ID = "dummydev.box.tnt";
         public const string TNT_BOX_PATH = "res://src/obstacles/obstacle/tnt_box/TntBox.tscn";
+        public const string SWIPE_BOX_ID = "dummydev.box.swipe";
+        public const string SWIPE_BOX_PATH = "res://src/obstacles/obstacle/swipe_box/SwipeBox.tscn";
     }
 }

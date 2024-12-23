@@ -1,6 +1,5 @@
 using Godot;
 using System;
-
 public partial class GameController : Node
 {
     [Export]
@@ -8,21 +7,17 @@ public partial class GameController : Node
     [Export]
     public PackedScene GameMenuScene { get; set; }
 
-	public Game Game { get; set; }
+	public Session Game { get; set; }
 	public GameMenu Menu { get; set; }
 
     private bool MenuAwait = false;
     private double CurrentTime = 0f;
-    private double AwaitTime = 0.2f;
+    private double AwaitTime = 0.25f;
 
 	public override void _Ready()
 	{
-        Game ??= GameScene.Instantiate<Game>();
         Menu ??= GameMenuScene.Instantiate<GameMenu>();
-        
-        Game.GameEnd += Game_GameEnd;
         Menu.GamePlay += Menu_GamePlay;
-        Game.SpeedMultiply = 1.0f;
         Start();
 	}
 
@@ -33,17 +28,26 @@ public partial class GameController : Node
 
     private void Menu_GamePlay(object sender, EventArgs e)
     {
-        Game.Reset();
-        RemoveChild(Menu); // Temp removal so it doesnt run
-        AddChild(Game);
+        RemoveChild(Menu);
+        StartNewSession();
     }
 
     private void Game_GameEnd(object sender, float e)
     {
-        RemoveChild(Game); // Temp removal so it doesnt run
+        CallDeferred(MethodName.RemoveChild, Game);
 		AddChild(Menu);
         Menu.SetProcessInput(false);
         MenuAwait = true;
+    }
+
+    private void StartNewSession()
+    {
+        Game = GameScene.Instantiate<Session>();
+        Game.GameEnd += Game_GameEnd;
+        // Here any session settings would be loaded.
+        Game.Dummy = ResourceLoader.Load<PackedScene>("res://src/character/Dummy.tscn").Instantiate<Dummy>();
+
+        AddChild(Game);
     }
 
     public override void _Process(double delta)

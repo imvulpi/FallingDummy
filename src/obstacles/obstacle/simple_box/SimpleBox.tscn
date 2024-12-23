@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://dbbkeecalljuq"]
+[gd_scene load_steps=6 format=3 uid="uid://dbbkeecalljuq"]
 
 [ext_resource type="Script" path="res://src/obstacles/obstacle/simple_box/SimpleBox.cs" id="1_xbohv"]
 
@@ -25,25 +25,18 @@ height = 512
 fill_from = Vector2(1, 1)
 fill_to = Vector2(0.986726, 0.99115)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_la7ro"]
-size = Vector2(384, 384)
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nocuj"]
 size = Vector2(512, 512)
 
-[node name="SimpleBox" type="CharacterBody2D" node_paths=PackedStringArray("ObstacleArea")]
+[node name="SimpleBox" type="Area2D" node_paths=PackedStringArray("ObstacleNode", "ObstacleArea")]
 script = ExtResource("1_xbohv")
-ObstacleArea = NodePath("Area2D")
+ObstacleNode = NodePath(".")
+ObstacleArea = NodePath(".")
 
 [node name="Sprite2D" type="MeshInstance2D" parent="."]
 mesh = SubResource("ArrayMesh_ehk70")
 texture = SubResource("GradientTexture2D_0vpu4")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("RectangleShape2D_la7ro")
-
-[node name="Area2D" type="Area2D" parent="."]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource("RectangleShape2D_nocuj")
 debug_color = Color(1, 0.000397319, 0.0833826, 0.42)

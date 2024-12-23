@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bs4lkxcgmyd42"
-path="res://.godot/imported/acorn-dummy.png-fce48cc74bb3c80d8eb5b45911e7674d.ctex"
+uid="uid://ofop5xhwkfyr"
+path="res://.godot/imported/dummycat.png-cfd6e9b21160a609ce251b66167abc56.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://acorn-dummy.png"
-dest_files=["res://.godot/imported/acorn-dummy.png-fce48cc74bb3c80d8eb5b45911e7674d.ctex"]
+source_file="res://graphics/character/dummycat.png"
+dest_files=["res://.godot/imported/dummycat.png-cfd6e9b21160a609ce251b66167abc56.ctex"]
 
 [params]
 
