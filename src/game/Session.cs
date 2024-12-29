@@ -9,6 +9,7 @@ public partial class Session : Node2D
 	public event EventHandler<float> GameEnd;
 
     [ExportGroup("Game")]
+    [Export] public bool Lost { get; set; }
     [Export] public Node2D DummySpot { get; set; }
 	[Export] public Node2D ObstacleSpot { get; set; }
     [Export] public Dummy Dummy { get; set; }
@@ -66,7 +67,11 @@ public partial class Session : Node2D
 
     private void Dummy_DeadEvent(object sender, EventArgs e)
     {
-        GameEnd.Invoke(this, ScoreManager.GetScore());
+        if (Lost == false)
+        {
+            GameEnd.Invoke(this, ScoreManager.GetScore());
+            Lost = true;
+        }
     }
 
     public override void _PhysicsProcess(double delta)

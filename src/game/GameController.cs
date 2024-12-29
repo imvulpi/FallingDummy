@@ -1,5 +1,9 @@
+using FallingDummy.src.commons.io;
+using FallingDummy.src.game.data;
+using FallingDummy.src.game.data.record;
 using Godot;
 using System;
+using System.IO;
 public partial class GameController : Node
 {
     [Export]
@@ -9,6 +13,7 @@ public partial class GameController : Node
 
 	public Session Game { get; set; }
 	public GameMenu Menu { get; set; }
+    public IRecordSaver RecordSaver { get; set; } = new RecordSaver();
 
     private bool MenuAwait = false;
     private double CurrentTime = 0f;
@@ -18,13 +23,8 @@ public partial class GameController : Node
 	{
         Menu ??= GameMenuScene.Instantiate<GameMenu>();
         Menu.GamePlay += Menu_GamePlay;
-        Start();
-	}
-
-    private void Start()
-    {
         AddChild(Menu);
-    }
+	}
 
     private void Menu_GamePlay(object sender, EventArgs e)
     {
@@ -34,10 +34,15 @@ public partial class GameController : Node
 
     private void Game_GameEnd(object sender, float e)
     {
-        CallDeferred(MethodName.RemoveChild, Game);
-		AddChild(Menu);
+        RemoveChild(Game);
+        string recordsDirectory = Path.Join(OS.GetUserDataDir(), DataConsts.RECORDS_DIR);
+        DirectoryHelper.ValidateDirectory(recordsDirectory);
+        RecordSaver.Save(new Record(DataConsts.CLASSIC_RECORD_NAME, e), Path.Join(recordsDirectory, DataConsts.RECORD_FILE));
+        AddChild(Menu);
         Menu.SetProcessInput(false);
         MenuAwait = true;
+        Menu.LoadRecord(DataConsts.CLASSIC_RECORD_NAME);
+        Menu.LoadLostScore(e);
     }
 
     private void StartNewSession()
