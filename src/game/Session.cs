@@ -69,9 +69,15 @@ public partial class Session : Node2D
     {
         if (Lost == false)
         {
-            GameEnd.Invoke(this, ScoreManager.GetScore());
+            CallDeferred(nameof(EndGame), ScoreManager.GetScore());
             Lost = true;
         }
+    }
+
+    private void EndGame(float score)
+    {
+        GameEnd.Invoke(this, score);
+        Lost = true;
     }
 
     public override void _PhysicsProcess(double delta)
